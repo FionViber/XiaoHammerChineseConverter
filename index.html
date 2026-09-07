@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>中国内地标准繁体转换器</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f3;
+      --panel: #ffffff;
+      --text: #1f241f;
+      --muted: #687066;
+      --line: #dfe5dc;
+      --soft: #f9faf7;
+      --primary: #87512a;
+      --primary-hover: #6f401f;
+      --accent: #a8332c;
+      --wash: #f2e7dc;
+      --shadow: 0 18px 50px rgba(47, 37, 28, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    main {
+      width: min(1180px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 32px 0;
+    }
+
+    header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button,
+    .file-button {
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      color: #fff;
+      background: var(--primary);
+      font-size: 14px;
+      font-weight: 650;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    button:hover,
+    .file-button:hover {
+      background: var(--primary-hover);
+    }
+
+    button.secondary,
+    .file-button.secondary {
+      color: var(--text);
+      background: #fff;
+      border-color: var(--line);
+    }
+
+    button.secondary:hover,
+    .file-button.secondary:hover {
+      background: #f2f4ef;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .pane {
+      min-height: 620px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .pane-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 52px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .pane-title {
+      font-size: 14px;
+      font-weight: 720;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    textarea,
+    .output {
+      flex: 1;
+      width: 100%;
+      min-height: 500px;
+      padding: 16px;
+      border: 0;
+      outline: none;
+      color: var(--text);
+      background: #fff;
+      font: 16px/1.75 "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", SimSun, serif;
+      letter-spacing: 0;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    .output {
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    mark {
+      padding: 0 2px;
+      border-radius: 3px;
+      color: var(--accent);
+      background: var(--wash);
+    }
+
+    .pane-foot {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      min-height: 54px;
+      padding: 10px 16px;
+      border-top: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    @media (max-width: 880px) {
+      main {
+        width: min(100vw - 24px, 720px);
+        padding-top: 22px;
+      }
+
+      header,
+      .workspace {
+        display: block;
+      }
+
+      .pane {
+        min-height: 420px;
+      }
+
+      .pane + .pane {
+        margin-top: 14px;
+      }
+
+      textarea,
+      .output {
+        min-height: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1 data-i18n="title">中国内地标准繁体转换器</h1>
+        <div class="subtitle" data-i18n="subtitle">将混杂不同标准的简体/繁体/异体字形转换为符合中国内地《通用规范汉字表》（2013）规范的繁体字形。</div>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <section class="pane">
+        <div class="pane-head">
+          <div class="pane-title" data-i18n="inputTitle">输入</div>
+          <div id="inputCount" class="count">0 字符</div>
+        </div>
+        <textarea id="inputText" spellcheck="false" data-i18n-placeholder="inputPlaceholder" placeholder="输入或粘贴需要转换的文本"></textarea>
+        <div class="pane-foot">
+          <div class="actions">
+            <button id="convertButton" type="button" data-i18n="convertButton">转换</button>
+            <button id="sampleButton" class="secondary" type="button" data-i18n="sampleButton">展示示例</button>
+            <label class="file-button secondary" for="fileInput" data-i18n="importButton">导入文件</label>
+            <input id="fileInput" type="file" accept=".txt,text/plain">
+            <button id="clearButton" class="secondary" type="button" data-i18n="clearButton">清空</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="pane">
+        <div class="pane-head">
+          <div class="pane-title" data-i18n="outputTitle">输出</div>
+          <div id="outputCount" class="count">0 处命中</div>
+        </div>
+        <div id="outputText" class="output" aria-live="polite"></div>
+        <div class="pane-foot">
+          <div class="actions">
+            <button id="copyButton" class="secondary" type="button" data-i18n="copyButton">复制输出</button>
+            <button id="downloadButton" class="secondary" type="button" data-i18n="downloadButton">下载输出</button>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="./vendor/t2gov-data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
