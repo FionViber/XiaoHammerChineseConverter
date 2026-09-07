@@ -25,7 +25,7 @@
 开启 GitHub Pages 后，在线版本会发布在：
 
 ```text
-https://<your-github-username>.github.io/mainland-standard-traditional-chinese-converter/
+https://fionviber.github.io/XiaoHammerChineseConverter/
 ```
 
 ## 离线使用

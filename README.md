@@ -25,7 +25,7 @@ It converts mixed Simplified Chinese, Traditional Chinese, and variant character
 After GitHub Pages is enabled, the online version will be available at:
 
 ```text
-https://<your-github-username>.github.io/mainland-standard-traditional-chinese-converter/
+https://fionviber.github.io/XiaoHammerChineseConverter/
 ```
 
 ## Use Offline
