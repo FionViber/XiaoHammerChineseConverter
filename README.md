@@ -22,7 +22,7 @@ It converts mixed Simplified Chinese, Traditional Chinese, and variant character
 
 ## Use Online
 
-After GitHub Pages is enabled, the online version will be available at:
+The online version is available at:
 
 ```text
 https://fionviber.github.io/XiaoHammerChineseConverter/

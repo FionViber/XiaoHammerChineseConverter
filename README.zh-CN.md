@@ -22,7 +22,7 @@
 
 ## 在线使用
 
-开启 GitHub Pages 后，在线版本会发布在：
+在线版本发布在：
 
 ```text
 https://fionviber.github.io/XiaoHammerChineseConverter/
