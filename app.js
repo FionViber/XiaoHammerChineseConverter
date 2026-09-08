@@ -15,13 +15,19 @@
     copyButton: $("#copyButton"),
     downloadButton: $("#downloadButton"),
     fileInput: $("#fileInput"),
+    languageSelect: $("#languageSelect"),
   };
 
   const sample = "落霞与孤鹜齐飞，秋水共长天一色。渔舟唱晚，响穷彭蠡之滨；雁阵惊寒，声断衡阳之浦。";
+  const localeStorageKey = "mainland-standard-traditional-converter-locale";
   const messages = {
     zh: {
       title: "中国内地标准繁体转换器",
       subtitle: "将混杂不同标准的简体/繁体/异体字形转换为符合中国内地《通用规范汉字表》（2013）规范的繁体字形。",
+      languageLabel: "语言",
+      autoLanguage: "自动",
+      zhLanguage: "中文",
+      enLanguage: "English",
       inputTitle: "输入",
       outputTitle: "输出",
       inputPlaceholder: "输入或粘贴需要转换的文本",
@@ -39,6 +45,10 @@
     en: {
       title: "Chinese Mainland Standard Traditional Converter",
       subtitle: "Convert mixed Simplified, Traditional, and variant Chinese character forms into Traditional forms that conform to China's General Standard Chinese Characters Table (2013).",
+      languageLabel: "Language",
+      autoLanguage: "Auto",
+      zhLanguage: "中文",
+      enLanguage: "English",
       inputTitle: "Input",
       outputTitle: "Output",
       inputPlaceholder: "Enter or paste Chinese text to convert",
@@ -54,11 +64,35 @@
       clipboardUnavailable: "Clipboard permission is unavailable in this browser.",
     },
   };
-  const locale = detectLocale();
-  const text = messages[locale];
+  let localePreference = getSavedLocalePreference();
+  let locale = resolveLocale(localePreference);
+  let text = messages[locale];
 
   let lastOutput = "";
   let converter = null;
+  let lastHitCount = 0;
+
+  function getSavedLocalePreference() {
+    try {
+      const saved = window.localStorage.getItem(localeStorageKey);
+      return ["auto", "zh", "en"].includes(saved) ? saved : "auto";
+    } catch (error) {
+      return "auto";
+    }
+  }
+
+  function saveLocalePreference(value) {
+    localePreference = ["auto", "zh", "en"].includes(value) ? value : "auto";
+    try {
+      if (localePreference === "auto") {
+        window.localStorage.removeItem(localeStorageKey);
+      } else {
+        window.localStorage.setItem(localeStorageKey, localePreference);
+      }
+    } catch (error) {
+      // Some browser privacy modes disable localStorage; the selector still works for this session.
+    }
+  }
 
   function detectLocale() {
     const browserLanguages = [
@@ -70,6 +104,10 @@
     return browserLanguages.some((language) => /^zh(?:[-_]|$)/i.test(language))
       ? "zh"
       : "en";
+  }
+
+  function resolveLocale(preference) {
+    return preference === "zh" || preference === "en" ? preference : detectLocale();
   }
 
   function localizeUI() {
@@ -85,6 +123,31 @@
       const key = element.dataset.i18nPlaceholder;
       if (text[key]) element.setAttribute("placeholder", text[key]);
     }
+
+    if (els.languageSelect) {
+      els.languageSelect.value = localePreference;
+      els.languageSelect.setAttribute("aria-label", text.languageLabel);
+      for (const option of els.languageSelect.options) {
+        const key = `${option.value}Language`;
+        if (text[key]) option.textContent = text[key];
+      }
+    }
+  }
+
+  function changeLocale(value) {
+    saveLocalePreference(value);
+    locale = resolveLocale(localePreference);
+    text = messages[locale];
+    localizeUI();
+
+    if (!data || !data.dictionaries) {
+      els.output.textContent = text.dictionaryLoadFailed;
+      updateCounts();
+      els.outputCount.textContent = text.matchCount(0);
+      return;
+    }
+
+    runConvert();
   }
 
   function escapeHtml(value) {
@@ -279,6 +342,7 @@
     updateCounts();
     if (!input) {
       lastOutput = "";
+      lastHitCount = 0;
       renderOutput([]);
       els.outputCount.textContent = text.matchCount(0);
       return;
@@ -286,6 +350,7 @@
 
     const result = convertText(input);
     lastOutput = result.output;
+    lastHitCount = result.hits;
     renderOutput(result.parts);
     els.outputCount.textContent = text.matchCount(result.hits);
   }
@@ -321,6 +386,7 @@
   function clearAll() {
     els.input.value = "";
     lastOutput = "";
+    lastHitCount = 0;
     renderOutput([]);
     updateCounts();
     els.outputCount.textContent = text.matchCount(0);
@@ -339,6 +405,7 @@
 
   function init() {
     localizeUI();
+    els.languageSelect.addEventListener("change", () => changeLocale(els.languageSelect.value));
 
     if (!data || !data.dictionaries) {
       els.output.textContent = text.dictionaryLoadFailed;
