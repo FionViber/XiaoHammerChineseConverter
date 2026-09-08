@@ -29,7 +29,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir dist
-          cp index.html app.js LICENSE README.md README.zh-CN.md CHANGELOG.md THIRD_PARTY_NOTICES.md RELEASE_NOTES.md .nojekyll dist/
+          cp index.html app.js LICENSE README.md README.zh-CN.md README.zh-TW.md CHANGELOG.md THIRD_PARTY_NOTICES.md RELEASE_NOTES.md .nojekyll dist/
           cp -R assets vendor licenses dist/
 
       - name: Configure GitHub Pages

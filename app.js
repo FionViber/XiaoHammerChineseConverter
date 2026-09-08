@@ -21,12 +21,13 @@
   const sample = "落霞与孤鹜齐飞，秋水共长天一色。渔舟唱晚，响穷彭蠡之滨；雁阵惊寒，声断衡阳之浦。";
   const localeStorageKey = "mainland-standard-traditional-converter-locale";
   const messages = {
-    zh: {
+    "zh-CN": {
       title: "中国内地标准繁体转换器",
       subtitle: "将混杂不同标准的简体/繁体/异体字形转换为符合中国内地《通用规范汉字表》（2013）规范的繁体字形。",
       languageLabel: "语言",
       autoLanguage: "自动",
-      zhLanguage: "中文",
+      zhCNLanguage: "简体中文",
+      zhTWLanguage: "繁體中文",
       enLanguage: "English",
       inputTitle: "输入",
       outputTitle: "输出",
@@ -42,12 +43,35 @@
       dictionaryLoadFailed: "字表加载失败。",
       clipboardUnavailable: "当前浏览器未开放剪贴板权限。",
     },
+    "zh-TW": {
+      title: "中國內地標準繁體轉換器",
+      subtitle: "將混雜不同標準的簡體/繁體/異體字形轉換為符合中國內地《通用規範漢字表》（2013）規範的繁體字形。",
+      languageLabel: "語言",
+      autoLanguage: "自動",
+      zhCNLanguage: "简体中文",
+      zhTWLanguage: "繁體中文",
+      enLanguage: "English",
+      inputTitle: "輸入",
+      outputTitle: "輸出",
+      inputPlaceholder: "輸入或貼上需要轉換的文字",
+      convertButton: "轉換",
+      sampleButton: "顯示範例",
+      importButton: "匯入檔案",
+      clearButton: "清空",
+      copyButton: "複製輸出",
+      downloadButton: "下載輸出",
+      characterCount: (count) => `${count} 字元`,
+      matchCount: (count) => `${count} 處命中`,
+      dictionaryLoadFailed: "字表載入失敗。",
+      clipboardUnavailable: "目前瀏覽器未開放剪貼簿權限。",
+    },
     en: {
       title: "Chinese Mainland Standard Traditional Converter",
       subtitle: "Convert mixed Simplified, Traditional, and variant Chinese character forms into Traditional forms that conform to China's General Standard Chinese Characters Table (2013).",
       languageLabel: "Language",
       autoLanguage: "Auto",
-      zhLanguage: "中文",
+      zhCNLanguage: "Simplified Chinese",
+      zhTWLanguage: "Traditional Chinese",
       enLanguage: "English",
       inputTitle: "Input",
       outputTitle: "Output",
@@ -75,14 +99,15 @@
   function getSavedLocalePreference() {
     try {
       const saved = window.localStorage.getItem(localeStorageKey);
-      return ["auto", "zh", "en"].includes(saved) ? saved : "auto";
+      if (saved === "zh") return "zh-CN";
+      return ["auto", "zh-CN", "zh-TW", "en"].includes(saved) ? saved : "auto";
     } catch (error) {
       return "auto";
     }
   }
 
   function saveLocalePreference(value) {
-    localePreference = ["auto", "zh", "en"].includes(value) ? value : "auto";
+    localePreference = ["auto", "zh-CN", "zh-TW", "en"].includes(value) ? value : "auto";
     try {
       if (localePreference === "auto") {
         window.localStorage.removeItem(localeStorageKey);
@@ -101,17 +126,19 @@
       navigator.userLanguage,
     ].filter(Boolean);
 
-    return browserLanguages.some((language) => /^zh(?:[-_]|$)/i.test(language))
-      ? "zh"
-      : "en";
+    const chineseLanguage = browserLanguages.find((language) => /^zh(?:[-_]|$)/i.test(language));
+    if (!chineseLanguage) return "en";
+
+    return /^zh[-_](?:tw|hk|mo|hant)/i.test(chineseLanguage) ? "zh-TW" : "zh-CN";
   }
 
   function resolveLocale(preference) {
-    return preference === "zh" || preference === "en" ? preference : detectLocale();
+    if (preference === "zh") return "zh-CN";
+    return ["zh-CN", "zh-TW", "en"].includes(preference) ? preference : detectLocale();
   }
 
   function localizeUI() {
-    document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
+    document.documentElement.lang = locale;
     document.title = text.title;
 
     for (const element of document.querySelectorAll("[data-i18n]")) {
@@ -128,7 +155,11 @@
       els.languageSelect.value = localePreference;
       els.languageSelect.setAttribute("aria-label", text.languageLabel);
       for (const option of els.languageSelect.options) {
-        const key = `${option.value}Language`;
+        const key = option.value === "zh-CN"
+          ? "zhCNLanguage"
+          : option.value === "zh-TW"
+            ? "zhTWLanguage"
+            : `${option.value}Language`;
         if (text[key]) option.textContent = text[key];
       }
     }

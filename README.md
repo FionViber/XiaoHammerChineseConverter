@@ -1,6 +1,6 @@
 <p align="right">
   <strong>Multi-language:</strong>
-  English | <a href="./README.zh-CN.md">简体中文</a>
+  English | <a href="./README.zh-CN.md">简体中文</a> | <a href="./README.zh-TW.md">繁體中文</a>
 </p>
 
 # Chinese Mainland Standard Traditional Converter
@@ -9,7 +9,7 @@ A fully offline browser-based converter for Chinese Mainland standard Traditiona
 
 It converts mixed Simplified Chinese, Traditional Chinese, and variant character forms into Traditional forms that conform to China's General Standard Chinese Characters Table (2013). The app runs entirely in the browser and does not upload text to any server.
 
-![Preview](./assets/preview.png)
+![English interface screenshot](./assets/screenshot-en.png)
 
 ## Features
 
@@ -17,7 +17,7 @@ It converts mixed Simplified Chinese, Traditional Chinese, and variant character
 - Uses an OpenCC-style deterministic pipeline: phrase dictionaries first, character dictionaries as fallback.
 - Runs fully offline after download.
 - Requires no server, account, CDN, build step, or package installation.
-- Automatically switches the UI language: Chinese for any `zh` browser locale, English for all other locales.
+- Supports Auto, Simplified Chinese, Traditional Chinese, and English UI modes.
 - Supports text file import, output copy, and output download.
 
 ## Use Online
