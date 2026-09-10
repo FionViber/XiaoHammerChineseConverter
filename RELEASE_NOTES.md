@@ -1,9 +1,9 @@
-# v1.0.0
+# v1.1.0
 
-Initial public release of XiaoHammer Chinese Converter.
+Interface and documentation refresh for XiaoHammer Chinese Converter.
 
-- Converts mixed Simplified, Traditional, and variant Chinese text into Chinese Mainland standard Traditional forms.
-- Runs fully offline in the browser after download.
-- Uses OpenCC-style phrase dictionaries first, with character dictionaries as fallback.
-- Includes automatic Chinese/English UI switching based on browser language.
-- Includes file import, output copy, and output download.
+- Added lightweight toast feedback for Convert, Show Example, Clear, Copy Output, and Download Output actions.
+- Updated the language selector order to Auto, English, Simplified Chinese, and Traditional Chinese.
+- Kept the Auto option label localized to the current UI language.
+- Reworked the English, Simplified Chinese, and Traditional Chinese README files to match the XiaoHammer README style.
+- Confirmed GitHub Pages deployment includes the updated app and localized documentation.

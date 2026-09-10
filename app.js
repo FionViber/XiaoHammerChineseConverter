@@ -16,6 +16,7 @@
     downloadButton: $("#downloadButton"),
     fileInput: $("#fileInput"),
     languageSelect: $("#languageSelect"),
+    toast: $("#toast"),
   };
 
   const sample = "落霞与孤鹜齐飞，秋水共长天一色。渔舟唱晚，响穷彭蠡之滨；雁阵惊寒，声断衡阳之浦。";
@@ -42,6 +43,14 @@
       matchCount: (count) => `${count} 处命中`,
       dictionaryLoadFailed: "字表加载失败。",
       clipboardUnavailable: "当前浏览器未开放剪贴板权限。",
+      convertDoneToast: "✨ 转换完成",
+      sampleLoadedToast: "📖 示例已展示",
+      clearDoneToast: "🧹 已清空",
+      copyDoneToast: "✅ 输出已复制",
+      copyEmptyToast: "⚠️ 没有可复制的输出",
+      downloadDoneToast: "⬇️ 输出已下载",
+      downloadEmptyToast: "⚠️ 没有可下载的输出",
+      clipboardUnavailableToast: "⚠️ 剪贴板权限不可用",
     },
     "zh-TW": {
       title: "中國內地標準繁體轉換器",
@@ -64,6 +73,14 @@
       matchCount: (count) => `${count} 處命中`,
       dictionaryLoadFailed: "字表載入失敗。",
       clipboardUnavailable: "目前瀏覽器未開放剪貼簿權限。",
+      convertDoneToast: "✨ 轉換完成",
+      sampleLoadedToast: "📖 範例已顯示",
+      clearDoneToast: "🧹 已清空",
+      copyDoneToast: "✅ 輸出已複製",
+      copyEmptyToast: "⚠️ 沒有可複製的輸出",
+      downloadDoneToast: "⬇️ 輸出已下載",
+      downloadEmptyToast: "⚠️ 沒有可下載的輸出",
+      clipboardUnavailableToast: "⚠️ 剪貼簿權限不可用",
     },
     en: {
       title: "Chinese Mainland Standard Traditional Converter",
@@ -86,6 +103,14 @@
       matchCount: (count) => `${count} ${count === 1 ? "match" : "matches"}`,
       dictionaryLoadFailed: "Dictionary data failed to load.",
       clipboardUnavailable: "Clipboard permission is unavailable in this browser.",
+      convertDoneToast: "✨ Converted",
+      sampleLoadedToast: "📖 Example loaded",
+      clearDoneToast: "🧹 Cleared",
+      copyDoneToast: "✅ Output copied",
+      copyEmptyToast: "⚠️ Nothing to copy",
+      downloadDoneToast: "⬇️ Output downloaded",
+      downloadEmptyToast: "⚠️ Nothing to download",
+      clipboardUnavailableToast: "⚠️ Clipboard permission unavailable",
     },
   };
   let localePreference = getSavedLocalePreference();
@@ -95,6 +120,7 @@
   let lastOutput = "";
   let converter = null;
   let lastHitCount = 0;
+  let toastTimer = 0;
 
   function getSavedLocalePreference() {
     try {
@@ -179,6 +205,16 @@
     }
 
     runConvert();
+  }
+
+  function showToast(key) {
+    if (!els.toast || !text[key]) return;
+    window.clearTimeout(toastTimer);
+    els.toast.textContent = text[key];
+    els.toast.classList.add("show");
+    toastTimer = window.setTimeout(() => {
+      els.toast.classList.remove("show");
+    }, 1800);
   }
 
   function escapeHtml(value) {
@@ -387,16 +423,23 @@
   }
 
   async function copyOutput() {
-    if (!lastOutput) return;
+    if (!lastOutput) {
+      showToast("copyEmptyToast");
+      return;
+    }
     try {
       await navigator.clipboard.writeText(lastOutput);
+      showToast("copyDoneToast");
     } catch (error) {
-      window.alert(text.clipboardUnavailable);
+      showToast("clipboardUnavailableToast");
     }
   }
 
   function downloadOutput() {
-    if (!lastOutput) return;
+    if (!lastOutput) {
+      showToast("downloadEmptyToast");
+      return;
+    }
     const blob = new Blob([lastOutput], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -406,11 +449,13 @@
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
+    showToast("downloadDoneToast");
   }
 
-  function loadSample() {
+  function loadSample(showNotification = true) {
     els.input.value = sample;
     runConvert();
+    if (showNotification) showToast("sampleLoadedToast");
     els.input.focus();
   }
 
@@ -421,6 +466,7 @@
     renderOutput([]);
     updateCounts();
     els.outputCount.textContent = text.matchCount(0);
+    showToast("clearDoneToast");
     els.input.focus();
   }
 
@@ -449,14 +495,17 @@
     els.input.addEventListener("keydown", (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "Enter") runConvert();
     });
-    els.convertButton.addEventListener("click", runConvert);
+    els.convertButton.addEventListener("click", () => {
+      runConvert();
+      showToast("convertDoneToast");
+    });
     els.sampleButton.addEventListener("click", loadSample);
     els.clearButton.addEventListener("click", clearAll);
     els.copyButton.addEventListener("click", copyOutput);
     els.downloadButton.addEventListener("click", downloadOutput);
     els.fileInput.addEventListener("change", () => importTextFile(els.fileInput.files[0]));
 
-    loadSample();
+    loadSample(false);
   }
 
   init();

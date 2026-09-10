@@ -1,71 +1,46 @@
-<p align="right">
-  <strong>多語言：</strong>
-  <a href="./README.md">English</a> | <a href="./README.zh-CN.md">简体中文</a> | 繁體中文
-</p>
-
 # 中國內地標準繁體轉換器
 
-一個純前端、純離線的中國內地標準繁體字形轉換工具。
+[English](README.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md)
 
-它可以將混雜不同標準的簡體、繁體、異體字形轉換為符合中國內地《通用規範漢字表》（2013）規範的繁體字形。工具完全在瀏覽器本地運行，不會上傳文字到伺服器。
+一個純前端、純離線的中國內地標準繁體字形轉換工具。它可以將混雜不同標準的簡體、繁體、異體字形轉換為符合中國內地《通用規範漢字表》（2013）規範的繁體字形。
 
-![繁體中文介面截圖](./assets/screenshot-zh-TW.png)
+## 線上演示
+
+GitHub Pages:
+
+https://fionviber.github.io/XiaoHammerChineseConverter/
+
+## 截圖
+
+![中國內地標準繁體轉換器繁體中文介面](assets/screenshot-zh-TW.png)
 
 ## 功能
 
-- 將簡體、繁體、異體字形混雜文字轉換為中國內地標準繁體。
-- 採用 OpenCC 風格的確定性轉換邏輯：短語詞典優先，單字詞典兜底。
-- 下載後可純離線使用。
-- 不需要伺服器、帳號、CDN、構建步驟或依賴安裝。
-- 支援自動、简体中文、繁體中文、English 介面模式。
-- 支援匯入文字檔案、複製輸出、下載輸出。
+- 將簡體、繁體、異體字形混雜文字轉換為中國內地標準繁體
+- 採用 OpenCC 風格的確定性轉換邏輯：短語詞典優先，單字詞典兜底
+- 匯入純文字檔案
+- 在瀏覽器允許剪貼簿存取時複製轉換結果
+- 將轉換結果下載為 UTF-8 文字檔案
+- 根據瀏覽器語言自動識別 English、简体中文、繁體中文
+- 支援手動切換語言，並保存本地偏好
+- 為轉換、顯示範例、清空、複製、下載提供輕量提示
+- 頁面和字典資料可用後可完全離線運行
 
-## 線上使用
+## 使用方式
 
-線上版本發布在：
+下載倉庫後，用現代瀏覽器打開 `index.html`。
 
-```text
-https://fionviber.github.io/XiaoHammerChineseConverter/
-```
+也可以把倉庫作為靜態網站托管。無需構建步驟。
 
-## 離線使用
+## 隱私
 
-下載 Release ZIP，解壓後用瀏覽器打開 `index.html` 即可。
+轉換在瀏覽器本地完成。頁面不會把文字上傳到伺服器，核心轉換器也不需要後端、帳號、CDN 或網路請求。
 
-工具只引用本地檔案：
+## 致謝
 
-```text
-index.html
-app.js
-vendor/t2gov-data.js
-```
+字表資料來自 [TerryTian-tech/OpenCC-Traditional-Chinese-characters-according-to-Chinese-government-standards](https://github.com/TerryTian-tech/OpenCC-Traditional-Chinese-characters-according-to-Chinese-government-standards)。
 
-## 轉換流程
-
-轉換器用原生 JavaScript 實現，並遵循上游 OpenCC 配置結構：
-
-```text
-CJK 相容漢字歸一化
--> s2t：STPhrases.txt 優先，STCharacters.txt 兜底
--> CJK 相容漢字歸一化
--> t2gov：TGPhrases.txt 優先，TGCharacters.txt 兜底
-```
-
-字表資料已經打包到 `vendor/t2gov-data.js`，瀏覽器可以直接本地運行。
-
-## 資料來源
-
-字表資料來自：
-
-```text
-TerryTian-tech/OpenCC-Traditional-Chinese-characters-according-to-Chinese-government-standards
-```
-
-倉庫：
-
-https://github.com/TerryTian-tech/OpenCC-Traditional-Chinese-characters-according-to-Chinese-government-standards
-
-上游字表使用 Apache License 2.0。詳見 `THIRD_PARTY_NOTICES.md` 和 `licenses/` 中的授權副本。
+上游字表說明見 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)，授權副本見 [licenses/](licenses/)。
 
 ## 免責聲明
 
@@ -73,6 +48,6 @@ https://github.com/TerryTian-tech/OpenCC-Traditional-Chinese-characters-accordin
 
 ## 授權條款
 
-本專案原創程式碼和文件使用 Zero-Clause BSD License（`0BSD`）。
+本專案原創程式碼和文件使用 [Zero-Clause BSD License](LICENSE)（`0BSD`）。
 
 內置的第三方字表資料繼續遵循其原始 Apache-2.0 授權。

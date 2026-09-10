@@ -1,71 +1,46 @@
-<p align="right">
-  <strong>Multi-language:</strong>
-  English | <a href="./README.zh-CN.md">简体中文</a> | <a href="./README.zh-TW.md">繁體中文</a>
-</p>
-
 # Chinese Mainland Standard Traditional Converter
 
-A fully offline browser-based converter for Chinese Mainland standard Traditional character forms.
+[English](README.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md)
 
-It converts mixed Simplified Chinese, Traditional Chinese, and variant character forms into Traditional forms that conform to China's General Standard Chinese Characters Table (2013). The app runs entirely in the browser and does not upload text to any server.
+A fully offline browser-based converter for Chinese Mainland standard Traditional character forms. It converts mixed Simplified Chinese, Traditional Chinese, and variant character forms into Traditional forms that conform to China's General Standard Chinese Characters Table (2013).
 
-![English interface screenshot](./assets/screenshot-en.png)
+## Live Demo
+
+GitHub Pages:
+
+https://fionviber.github.io/XiaoHammerChineseConverter/
+
+## Screenshot
+
+![Chinese Mainland Standard Traditional Converter English interface](assets/screenshot-en.png)
 
 ## Features
 
-- Converts mixed Simplified, Traditional, and variant Chinese text into Chinese Mainland standard Traditional forms.
-- Uses an OpenCC-style deterministic pipeline: phrase dictionaries first, character dictionaries as fallback.
-- Runs fully offline after download.
-- Requires no server, account, CDN, build step, or package installation.
-- Supports Auto, Simplified Chinese, Traditional Chinese, and English UI modes.
-- Supports text file import, output copy, and output download.
+- Convert mixed Simplified, Traditional, and variant Chinese text into Chinese Mainland standard Traditional forms
+- Use an OpenCC-style deterministic pipeline: phrase dictionaries first, character dictionaries as fallback
+- Import plain text files
+- Copy converted output when clipboard access is available
+- Download converted output as a UTF-8 text file
+- Auto-detect English, Simplified Chinese, and Traditional Chinese from the browser language
+- Allow manual language switching with a saved local preference
+- Show lightweight action feedback for conversion, example loading, clearing, copying, and downloading
+- Run fully offline after the page and dictionary data are available locally
 
-## Use Online
+## Usage
 
-The online version is available at:
+Download the repository and open `index.html` in a modern browser.
 
-```text
-https://fionviber.github.io/XiaoHammerChineseConverter/
-```
+You can also host the repository as a static site. No build step is required.
 
-## Use Offline
+## Privacy
 
-Download the release ZIP, extract it, and open `index.html` in a browser.
+Conversion happens in the browser. The page does not upload your text to a server, and the core converter does not require a backend, account, CDN, or network request.
 
-The app references only local files:
+## Credits
 
-```text
-index.html
-app.js
-vendor/t2gov-data.js
-```
+Dictionary data is derived from [TerryTian-tech/OpenCC-Traditional-Chinese-characters-according-to-Chinese-government-standards](https://github.com/TerryTian-tech/OpenCC-Traditional-Chinese-characters-according-to-Chinese-government-standards).
 
-## Conversion Pipeline
-
-The converter is implemented in plain JavaScript and follows the structure of the upstream OpenCC configuration:
-
-```text
-CJK Compatibility Ideographs normalization
--> s2t: STPhrases.txt first, STCharacters.txt fallback
--> CJK Compatibility Ideographs normalization
--> t2gov: TGPhrases.txt first, TGCharacters.txt fallback
-```
-
-The bundled data is generated into `vendor/t2gov-data.js` so the browser can run everything locally.
-
-## Data Source
-
-Dictionary data is derived from:
-
-```text
-TerryTian-tech/OpenCC-Traditional-Chinese-characters-according-to-Chinese-government-standards
-```
-
-Repository:
-
-https://github.com/TerryTian-tech/OpenCC-Traditional-Chinese-characters-according-to-Chinese-government-standards
-
-The upstream dictionaries are licensed under Apache License 2.0. See `THIRD_PARTY_NOTICES.md` and the license copy in `licenses/`.
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and the license copy in [licenses/](licenses/) for upstream dictionary notices.
 
 ## Disclaimer
 
@@ -73,6 +48,6 @@ This project is provided "as is", without warranty of any kind. Character conver
 
 ## License
 
-This project's original code and documentation are licensed under the Zero-Clause BSD License (`0BSD`).
+This project's original code and documentation are licensed under the [Zero-Clause BSD License](LICENSE) (`0BSD`).
 
 Bundled third-party dictionary data remains under its original Apache-2.0 license.
