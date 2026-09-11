@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.1 - 2026-09-11
+
+- Added a GitHub project link to the app footer.
+- Added author credit linking to the FionViber GitHub profile.
+- Localized the footer labels for English, Simplified Chinese, and Traditional Chinese.
+
 ## v1.1.0 - 2026-09-11
 
 - Added lightweight toast feedback for conversion, example loading, clearing, output copy, and output download actions.
